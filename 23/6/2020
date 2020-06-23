@@ -1,0 +1,147 @@
+# WEEK1
+**Bài 1**
+
+*Đề bài: Cho 1 tấm vé số có 7 chữ số. Tấm vé được gọi là may mắn nếu tổng 3 chữ số đầu bằng tổng 3 chữ số cuối. Tính xác xuất để mua được 1 tấm vé may mắn.*
+
+* Vd các vé số may mắn là:
+
+    * 1234123
+
+    * 2459137
+***
+*Hướng giải:*
+Tìm tổng số vé may mắn rồi chia cho tổng số vé.
+
+* *Cách 1:*
+Chạy hai vòng For lồng nhau để tìm xem với mỗi trường hợp của 3 chữ số đầu thì có bao nhiêu số có tổng của 3 chữ số cuối bằng với 3 chữ số đầu đó.
+
+* *Cách 2:*
+Vì tổng của 3 chữ số chỉ giao động trong khoảng từ 0 đến 27. Vì vậy ta tìm với mỗi trường hợp tổng của 3 số thì có bao nhiêu bộ 3 chữ số bằng với tổng đó( tạm gọi là n). Với mỗi cách trọn 3 chữ số đứng đầu ta có n cách chọn 3 chữ số đứng cuối nên ta có tổng bằng: n0^2 + n1^2+...+n27^2.
+Ta đã chọn được 3 chữ số đầu và và 3 chữ số cuối nên để có tổng sô vé ta chỉ cần nhân với 10 là số hoán vị của chữ số thứ 4.
+***
+*Code tham khảo:*
+
+    #include <bits/stdc++.h>
+    using namespace std;
+    int main(){
+    int ans=0;
+        for(int i=0;i<28;i++){
+            int dem=0;
+            for(int j=0;j<1000;j++){
+                string s = to_string(j);
+                while (s.length()<3) s="0"+s;
+                int tong=0;
+                for(int h=0;h<3;h++){
+                    int temp = s[h]-48;
+                    tong+= temp;
+                }
+                if (tong==i) dem++;
+            }
+            dem*= dem;
+            ans+=dem;
+        }
+        ans *=10;
+        cout<<((double)ans/100000.00)<<"%"<<endl;
+        return 0;
+    }
+
+***
+**Bài 2**
+*Đề bài: Cho một chuỗi gồm các kí tự từ a đến z. Một chuỗi được gọi là Alpha nếu mỗi kí tự chỉ xuất hiện 1 lần trong chuỗi. Kiểm tra xem 1 dãy có phải là Alpha hay không nếu có in ra YES , nếu không in ra NO .*
+
+*P/S: Đầu vào là 1 chuỗi kí tự có độ dài tối đa 10^6 phần tử.*
+
+* Vd1:
+    * INPUT:    abcder
+
+    * OUTPUT:   YES
+* Vd2:
+    * INPUT:    degef
+
+    * OUTPUT:   NO
+***
+*Hướng giải:*
+Đếm sự xuất hiện của từng kí tự xem kí tự nào xuất hiện 2 lần thì dùng chương trình và in ra NO, nếu chạy đến cuối chuỗi mà chưa có kí tự nào xuất hiện 2 lần thì in ra YES.
+* Vì tổng số kí tự trên bảng chữ cái là  mà mỗi kí tự chỉ được xuất hiện 1 lần nên chuỗi nào có lơn hơn  kí tự thì có thể in ra No ngay lập tức.
+    * Giải theo cách chuyển kí tự về số rồi sắp xếp chuỗi theo chiều tăng hoặc giảm dần. Kiểm tra từ đầu đên cuối chuỗi nêú 2 kí tự cạnh nhau giống nhau thì in ra NO và dừng chương trình. Nếu không in ra YES.
+    * Nhập luôn số lần xuất hiện của kí tự vào mảng có Index là các kí tự. Kí tự nào xuất hiện 2 lần thì in ra NO. Nếu không in ra YES.
+***
+*Code tham khảo:*
+
+    #include <bits/stdc++.h>
+    #define pb push_back
+    using namespace std;
+    int main(){
+        string s;
+        cin>>s;
+        int ch;
+        vector <int> v;
+        if (s.length()>26){
+            cout<<"NO"<<endl;
+            return 0;
+        }
+        for(int i=0;i<s.length();i++){
+            ch=s[i];
+            v.pb(ch);
+        }
+        sort(v.begin(), v.end());
+        int i=1;
+        while (i<s.size()){
+            if(v[i-1]==v[i]){
+                cout<<"NO"<<endl;
+                return 0;
+            }
+            i++;
+        }
+        cout<<"YES"<<endl;
+        return 0;
+
+    }
+***
+**Bài 3**
+*Đề bài: Cho 1 dãy các số nguyên. Sắp xếp lại dãy sao cho các số chẵn đứng về phía bên trái còn các số lẻ đứng về phía bên phải*
+
+* Vd1:
+    * INPUT:    
+                5
+                1 2 3 4 5
+
+    * OUTPUT:   2 4 5 3 1
+* Vd2:
+    * INPUT:    
+                5
+                1 4 8 9 9
+
+    * OUTPUT:   4 8 1 9 9
+*Hướng giải:*
+    * Cách 1:
+    Nhập vào các phần tử, dùng 2 biến để lưu Index đầu và cuối. Kiểm tra số nhập vào nếu là số chẵn thì lưu vào mảng tại Index đầu rồi tăng Index lên 1 đơn vị, nếu là số lẻ thì lưu vào mảng tại Index cuối rồi giảm Index đi 1 đơn vị.
+    * Cách 2:
+    Tạo ra 1 Index lưu vị trí số lẻ đầu tiên. Khởi tại Index = 0. Cho vòng for chạy từ đầu đến cuối mảng kiểm tra xem số nào là số chẵn thì đổi vị trí số đó với vị trí số tại Index rồi tăng Index lên 1 đơn vị.
+    * Cách 3:
+    Tạo 1 string rỗng là string kết quả. Nhập các số vào 1 biến. Kiểm tra nếu đó là số chẵn thì chuyển số đó thành dạng string rồi cộng vào đầu string kết quả. Nếu đó là số lẻ thì làm tương tự nhưng thay vì cộng vào đầu ta cộng vào cuối string.
+***
+* Code tham khảo:*
+
+        #include <bits/stdc++.h>
+        using namespace std;
+        int main(){
+            int n,m,h=0,k;
+            cin>>n;
+            k=n-1;
+            int a[1000000];
+            for(int i=0;i<n;i++){
+                cin>>m;
+                if(m%2==0) {
+                    a[h]=m;
+                    h++;
+                }
+                else {
+                    a[k]=m;
+                    k--;
+                }
+            }
+            for(int i=0;i<n;i++) cout<<a[i]<<" ";
+            return 0;
+        }
+***
